@@ -11,7 +11,8 @@ knex.schema.hasTable(userTable).then(function(exists) {
       table.string('last_name', 254);
       table.string('username', 254).notNullable().unique();
       table.string('email', 254).notNullable().unique();
-      table.string('password', 254).notNullable().unique();
+      table.string('password', 254).notNullable().unique(),
+      table.string('auth').notNullable().unique();
       table.timestamps();
     }).then(function(){
       console.log("Table Created!!");
