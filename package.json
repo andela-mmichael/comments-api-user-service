@@ -4,8 +4,8 @@
   "description": "A user service for HacksHub",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "test": "NODE_ENV=test && jasmine-node spec/**/**.js --autotest -color"
+    "start": "nodemon index.js",
+    "test": "NODE_ENV=test && jasmine-node tests/user/**.js --autotest --color --verbose"
   },
   "repository": {
     "type": "git",
