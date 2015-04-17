@@ -1,33 +1,30 @@
-var db = require('../../../config/db.config');
-var knex = require('knex')(db.database[process.env.NODE_ENV]);
+var config = require('../../../config/db.config');
+var knex = require('knex')(config.db[process.env.NODE_ENV]);
 var bookshelf = require('bookshelf')(knex);
+var userTable = config.db.table_name;
 
-console.log(db.database.test);
-console.log('got here');
-knex.schema.hasTable('usersnew').then(function(exists) {
-  console.log(exists);
-  if (!exists) {
-   knex.schema.createTable('usersnew', function(table){
-  console.log('Users Table is Created!');
+knex.schema.hasTable(userTable).then(function(exists) {
+  if(!exists) {
+   knex.schema.createTable(userTable, function(table){
       table.increments('id').primary();
       table.string('first_name', 254);
       table.string('last_name', 254);
-      table.string('username', 254);
-      table.string('email'), 254;
-      table.string('password', 254);
+      table.string('username', 254).notNullable().unique();
+      table.string('email', 254).notNullable().unique();
+      table.string('password', 254).notNullable().unique();
       table.timestamps();
     }).then(function(){
-      console.log("Created!!");
+      console.log("Table Created!!");
     });
   }
 });
 
 var UsersModel = bookshelf.Model.extend({
-  tableName: 'usersnew'
+  tableName: userTable
 });
 
-UsersModel.forge({first_name: 'Sunny', last_name: 'Ade', username: 'sunade', email: 'sunny_ade', password: '12345' })
-  .save();
-knex.schema.dropTable('users');
+var UsersCollection = bookshelf.Collection.extend({
+  model: UsersModel
+});
 
-module.exports = UsersModel;
+module.exports = [ UsersModel, UsersCollection ];
