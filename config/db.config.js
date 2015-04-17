@@ -1,22 +1,28 @@
 'use strict';
 
 module.exports = {
-  database: {
+  port: process.env.PORT || 8100,
+  db: {
+    development: {
+      client: 'pg',
+      connection: {
+        host: 'localhost',
+        user: 'charmingmel',
+        database: 'usercomments'
+      },
+      debug: true
+    },
+
     test: {
       client: 'pg',
       connection: {
         host: 'localhost',
         user: 'charmingmel',
-        database: 'users_testdb'
-      }
-    }
-    // development: {
-    //   client: 'pg',
-    //   connection: {
-    //     // host: 'localhost'
-    //     user: 'charmingmel',
-    //     // database: 'user_testdb'
-    //   }
-    // }
+        database: 'usercomments_test'
+      },
+      debug: true
+    },
+    table_name: 'users'
+    
   }
 };
