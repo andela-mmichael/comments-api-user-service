@@ -15,13 +15,14 @@ describe('Unit Test for User Model', function(){
         last_name: 'doe', 
         username: 'johndoe', 
         email: 'johnny_doe@user.com', 
-        password: '1234'
+        password: '1234',
+        auth: '9999'
       });
       done();
     });
 
     //check that new user is created and saved in the database
-    it('should create a user', function(done){
+    it('should create a new user', function(done){
       testUser
         .save()
         .then(function(user){
@@ -30,7 +31,8 @@ describe('Unit Test for User Model', function(){
             last_name: 'doe', 
             username: 'johndoe', 
             email: 'johnny_doe@user.com', 
-            password: '1234'
+            password: '1234',
+            auth: '9999'
           }));
         done();
       });
@@ -120,7 +122,7 @@ describe('Unit Test for User Model', function(){
     });
 
     // Check that the new user cannot be saved without setting the password property
-    it('should not save a user without an password', function(done){
+    it('should not save user without a password', function(done){
       testUser.set({password: null});
       testUser
         .save()
@@ -133,7 +135,7 @@ describe('Unit Test for User Model', function(){
     });
 
     // Check that the new user cannot be saved if the password already exists
-    it('should not save if password not unique', function(done){
+    it('should not save if password already exists', function(done){
       Users.forge([
         {
           first_name: 'john',
@@ -151,7 +153,6 @@ describe('Unit Test for User Model', function(){
         }])
         .invokeThen('save')
         .then(function(){
-
         })
         .catch(function (error) {
           expect(error).not.toBeNull();
@@ -159,7 +160,41 @@ describe('Unit Test for User Model', function(){
         });
     });
 
-    afterEach(function (done) {
+    //check that user has token
+    it('should not save without a token', function(done){
+      testUser.set({auth: null});
+      testUser
+        .save()
+        .then(function(){
+        })
+        .catch(function(err){
+          expect(err).toBeDefined();
+          done();
+        });
+    });
+
+    //check that token is unique
+    it('should not save if token already exist', function(done){
+      Users.forge([
+      {
+        username: 'user44',
+        auth: '1111'
+      },
+      {
+        username: 'user77',
+        auth: '1111'
+      }
+      ])
+      .invokeThen('save')
+      .then(function(){
+      })
+      .catch(function(err){
+        expect(err).not.toBeNull();
+        done();
+      });
+    });
+
+    afterEach(function(done){
       knex('users')
         .where('first_name', 'john')
         .del()
@@ -167,7 +202,6 @@ describe('Unit Test for User Model', function(){
           done();
       });
     });
-
   });
 
   describe('Update User', function(){
@@ -175,8 +209,8 @@ describe('Unit Test for User Model', function(){
       User.forge({
         first_name: 'john',
         last_name: 'doe',
-        username: 'user9',
-        email: 'user9@user.com',
+        username: 'user22',
+        email: 'user22@user.com',
         password: '0101'      
       })
       .save()
@@ -189,11 +223,11 @@ describe('Unit Test for User Model', function(){
     //check that username is updated
     it('should update the username', function(done){
       User
-        .where('username', 'user9')
-        .save({username: 'user99'}, {method: 'update', patch: true})
+        .where('username', 'user22')
+        .save({username: 'user33'}, {method: 'update', patch: true})
         .then(function(update){
           expect(update.toJSON()).toEqual(jasmine.objectContaining({
-            username: 'user99'
+            username: 'user33'
           }));
           done();
         });
@@ -201,7 +235,7 @@ describe('Unit Test for User Model', function(){
 
     afterEach(function(done){
       knex('users')
-        .where('email', 'user9@user.com')
+        .where('email', 'user22@user.com')
         .del()
         .then(function(){
           done();
