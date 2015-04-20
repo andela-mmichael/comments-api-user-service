@@ -12,7 +12,6 @@ module.exports = {
       },
       debug: true
     },
-
     test: {
       client: 'pg',
       connection: {
@@ -22,7 +21,7 @@ module.exports = {
       },
       debug: true
     },
-    table_name: 'users'
-    
+    table_name: 'users',
+    secret: '@3nk507t!'
   }
 };
