@@ -22,6 +22,17 @@ module.exports = {
       },
       debug: true
     },
+    production: {
+      client: 'pg',
+      connection: {
+        host: 'ec2-54-225-135-30.compute-1.amazonaws.com',
+        user: 'jqparcyqmsydfu',
+        password: 'xN4iMbnKnPESpGirUCA0s4Yb6w'
+        database: 'dg5betu13rncn',
+        port: 5432
+      },
+      debug: true
+    }
     table_name: 'users'
   }
 };
