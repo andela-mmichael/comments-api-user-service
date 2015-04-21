@@ -27,7 +27,7 @@ module.exports = {
       connection: {
         host: 'ec2-50-17-192-136.compute-1.amazonaws.com',
         user: 'pikncxtuvmoota',
-        password: '8n9wSH0OJmIuaXETB3bL80tMax'
+        password: '8n9wSH0OJmIuaXETB3bL80tMax',
         database: 'de6tek6jj2h47o',
       },
       debug: true
