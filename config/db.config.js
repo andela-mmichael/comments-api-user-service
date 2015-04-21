@@ -31,7 +31,7 @@ module.exports = {
         database: 'de6tek6jj2h47o',
       },
       debug: true
-    }
+    },
     table_name: 'users'
   }
 };
