@@ -2,6 +2,7 @@
 
 module.exports = {
   port: process.env.PORT || 8100,
+  secret: '@3nk507t!',
   db: {
     development: {
       client: 'pg',
@@ -21,7 +22,6 @@ module.exports = {
       },
       debug: true
     },
-    table_name: 'users',
-    secret: '@3nk507t!'
+    table_name: 'users'
   }
 };
