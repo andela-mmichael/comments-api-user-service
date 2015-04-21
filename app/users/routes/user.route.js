@@ -3,14 +3,18 @@ var express = require('express');
 var Router = express.Router();
 
 Router
-  .get('/', Controller.getAllUsers)
+  //  /users routes
+  .get('/users', Controller.getAllUsers)
 
-  .post('/', Controller.createUser)
+  .post('/users/signup', Controller.signUp)
 
-  .get('/:username', Controller.getAUser)
+  .post('/users/login', Controller.login)
 
-  .put('/:username', Controller.updateUser)
+  // /users/username routes
+  .get('/users/:username', Controller.getUser)
 
-  .delete('/:username', Controller.removeUser);
+  .put('/users/:username', Controller.updateUser);
+
+  // .delete('/users/:username', Controller.removeUser);
 
 module.exports = Router;
