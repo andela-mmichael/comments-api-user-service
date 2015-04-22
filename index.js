@@ -10,7 +10,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 //connect to database
 var config = require('./config/db.config');
-config.db[process.env.NODE_ENV];
 
 //route middleware
 app.use('/', Router)

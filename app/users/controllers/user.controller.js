@@ -1,6 +1,7 @@
 var User = require('../models/user.model')[0];
 var jwt = require('jsonwebtoken');
 var config = require('../../../config/db.config');
+var knex = require('knex')(config.db[process.env.NODE_ENV]);
 var secret = config.secret;
 var express = require('express');
 var Router = express.Router();
@@ -113,7 +114,7 @@ module.exports = {
         user
           .save({
             username: req.body.username,
-            password: req.body.password,
+            password: enc_password,
             email: req.body.email
           }, {patch: true})
           .then(function (user1){
@@ -123,6 +124,24 @@ module.exports = {
       else{
         res.json({message: "Update Unsuccessful"});
       }
+    });
+  },
+
+  removeUser: function(req, res){
+    new User({
+      username: req.body.username
+    })
+    .fetch()
+    .then(function (user){
+      knex('users')
+        .where('username', req.body.username)
+        .del()
+        .then(function(){
+          res.status(200).json({message: "User deleted!"});
+        });
+    })
+    .catch(function (err){
+      res.json({Error: "User does not exist"});
     });
   }
 };

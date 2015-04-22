@@ -13,8 +13,8 @@ Router
   // /users/username routes
   .get('/users/:username', Controller.getUser)
 
-  .put('/users/:username', Controller.updateUser);
+  .put('/users/:username', Controller.updateUser)
 
-  // .delete('/users/:username', Controller.removeUser);
+  .delete('/users/:username', Controller.removeUser);
 
 module.exports = Router;
