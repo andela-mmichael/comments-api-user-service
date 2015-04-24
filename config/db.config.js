@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  port: process.env.PORT || 8100,
+  port: process.env.PORT || 8200,
   secret: '@3nk507t!',
   db: {
     development: {
