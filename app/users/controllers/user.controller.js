@@ -51,37 +51,36 @@ module.exports = {
 
   login: function(req, res){
     if(!(req.body.username && req.body.password)){
-      return res.status(400).json({message: "Invalid Username/Password"});
+      return res.status(400).json({message: "Username & Password are required"});
     }
-    var enc_password = encrypt(req.body.password, req.body.username);
-    User.forge(
-      {
-        username: req.body.username,
-        password: enc_password
+    User
+      .forge({
+        username: req.body.username
       })
       .fetch()
       .then(function (user){
         if(user){
           var token = jwt.sign(user, secret);
-          res.status(200).json({message: "Login successful!", data: token});
+          res.status(200).json({message: "Login successful!", authToken: token});
         }
         else{
           res.status(400).json({message: "Invalid Username/Password"});
         }
     })
     .catch(function(err){
-      res.status(500).json({Error: 'An error occurred' + err});
+      res.status(500).json(err);
     });
   },
 
   getAllUsers: function(req, res){
-    User.fetchAll({require: true})
-        .then(function (users) {
-          res.status(200).json(users);
-        })
-        .catch(function(err){
-          res.status(401).json({message: "No users found"});
-        });
+    User
+      .fetchAll({require: true})
+      .then(function (users) {
+        res.status(200).json(users);
+      })
+      .catch(function(err){
+        res.status(401).json({Error: "No users found"});
+      });
   },
 
   getUser: function(req, res){
@@ -95,8 +94,11 @@ module.exports = {
         res.status(200).json(user);
       }
       else{
-        res.status(404).json({Error: "No users found!"});
+        res.status(404).json({Error: "No user found"});
       }
+    })
+    .catch(function (err){
+      res.json({Error: "No user found"});
     });
   },
 
@@ -105,17 +107,16 @@ module.exports = {
     {
      username: req.params.username 
     })
-    .fetch()
+    .fetch({require: true})
     .then(function (user){
       if(user){
-        if(req.body.password){
-          var enc_password = encrypt(req.body.password, req.body.username);
-        }
+        // if(req.body.password){
+        //   var enc_password = encrypt(req.body.password, req.body.username);
+        // }
         user
           .save({
-            username: req.body.username,
-            password: enc_password,
-            email: req.body.email
+            username: req.body.username
+            // password: enc_password
           }, {patch: true})
           .then(function (user1){
             res.status(200).json({message: "Update successful", data: user1});
@@ -124,17 +125,20 @@ module.exports = {
       else{
         res.json({message: "Update Unsuccessful"});
       }
+    })
+    .catch(function (err){
+      res.json({Error: "User does not exist"});
     });
   },
 
   removeUser: function(req, res){
     new User({
-      username: req.body.username
+      username: req.params.username
     })
-    .fetch()
+    .fetch({require: true})
     .then(function (user){
       knex('users')
-        .where('username', req.body.username)
+        .where('username', req.params.username)
         .del()
         .then(function(){
           res.status(200).json({message: "User deleted!"});
@@ -143,7 +147,17 @@ module.exports = {
     .catch(function (err){
       res.json({Error: "User does not exist"});
     });
-  }
+  },
+
+  // verifyToken: function(err, req, res, next){
+  //   if (err.name === 'UnauthorizedError') {
+  //     res.status(401).json({Error: "Invalid"});
+  //   }
+  //   var decode = jwt.verify(req, secret);
+  //   console.log(decode);
+  //   res.json(decode);
+  // }
+  
 };
 
 
